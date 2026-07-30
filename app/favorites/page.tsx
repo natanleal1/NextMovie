@@ -7,7 +7,7 @@ export default function Home() {
     
       <Navbar />
 
-      <p>Contact page</p>
+      <p> Não há favoritos no momento</p>
     
     </div>
    

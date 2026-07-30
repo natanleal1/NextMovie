@@ -3,6 +3,7 @@ import Navbar from "./ui/Navbar";
 import Cards from "./ui/Cards";
 import Search from "./ui/Search";
 
+
 {/* <Search /> */}
 export default function Home() {
   return (
