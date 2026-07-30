@@ -14,10 +14,10 @@ export default function Cards() {
             {posts.map((post) => (
                 <div className="movie-card">
                     
-                    <div className="movie-info">
+                    <div className="movie-info" key={post.id}>
                         <h1>{post.titulo} - {post.ano}</h1>
                         <p>Gênero: {post.genero}</p>
-                        <Link href={`/filme/${encodeURIComponent(post.titulo)}`}><button>Saiba mais</button></Link>
+                        <Link href={`/movie/${encodeURIComponent(post.titulo)}`}><button>Saiba mais</button></Link>
                         <button> ♥ curtir </button>
                     </div>
 
