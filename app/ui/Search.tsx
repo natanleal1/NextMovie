@@ -1,28 +1,40 @@
 'use client'
 import React, { ChangeEvent, useState } from 'react';
 import { data } from "../moviesData"
-
+import Link from 'next/link'
+import Cards from "./Cards"
 
 export default function Search() {
-    const [value, setValue] = useState<string>("Buscar filme...");
-    const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        const { target } = event;
-        setValue(target.value);
-    };
+    const [searchQuery, setSearchQuery] = useState("")
+    const [loading, setLoading] = useState(false)
+    let movies: typeof data = []
 
-    // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    //     if (event.key === 'Enter') {
-    //         // Here, we call the onSearch function and pass the value
-    //         onSearch(value);
-    //     }
-    // };
+   function searchHandler(e: ChangeEvent<HTMLInputElement>) {
+        e.preventDefault()
+        if (!searchQuery.trim()) return 
+        if (loading) return //Won't allow to search while we search
+
+        setLoading(true)
+        try { 
+            movies = data.filter((movie) => 
+                movie.titulo.toLowerCase().includes(searchQuery.toLowerCase())
+            ) 
+        } catch (error){
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
 
     return (
+        <>
         <div className="relative w-full text-gray-600">
             <input
                 type="search"
                 name="search"
-                placeholder={value}
+                placeholder="Buscar filmes..."
+                value={searchQuery}
                 className="bg-white h-10 px-5 pr-10 w-full rounded-full text-sm focus:outline-none"
                 onChange={(event) => searchHandler(event)}
             />
@@ -40,5 +52,30 @@ export default function Search() {
                 </svg>
             </button>
         </div>
-    );
-};
+        <div>
+                {loading ? (
+                    <div className="loading">Loading...</div>
+                    ): (
+                    <div className="movies-grid">
+                        {
+
+                            movies.map((m) => (
+                            <div className="movie-card">
+                                
+                                <div className="movie-info" key={m.id}>
+                                    <h1>{m.titulo} - {m.ano}</h1>
+                                    <p>Gênero: {m.genero}</p>
+                                    <Link href={`/movie/${encodeURIComponent(m.titulo)}`}><button>Saiba mais</button></Link>
+                                    <button> ♥ curtir </button>
+                                </div>
+                                
+                            </div>
+                    ))
+
+                        }
+                    </div>)
+                }
+        </div>
+        </>
+    )
+}
